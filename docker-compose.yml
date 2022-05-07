@@ -1,0 +1,24 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    command: bash start.sh
+    ports:
+      - "3000:3000"
+    volumes:
+      - .:/jobs-api
+    environment:
+      DATABASE_URL: postgres://jobs_api:jobs_api@db/onebitjobs_development
+    depends_on:
+      - db
+  db:
+    image: postgres:14.2
+    environment:
+      POSTGRES_DB: onebitjobs_development
+      POSTGRES_USER: jobs_api
+      POSTGRES_PASSWORD: jobs_api
+    ports:
+      - "5432:5432"
+volumes:
+  db:
