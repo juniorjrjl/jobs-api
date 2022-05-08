@@ -1,19 +1,13 @@
 import dotenv from 'dotenv'
+import { router } from './routes'
+
 dotenv.config()
 
 import express from 'express'
-import { Candidate } from './models/candidates'
 
 const app = express()
 
-const router = express.Router()
-
-router.get('/', (req, res) => res.json({hello: 'hello, word!'}))
-
-router.get('/candidates', async (req, res) => {
-    const candidates = await Candidate.findAll()
-    return res.json(candidates)
-})
+app.use(express.json())
 
 app.use(router)
 
