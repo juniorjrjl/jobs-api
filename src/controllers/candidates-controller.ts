@@ -1,5 +1,5 @@
 import { Request, Response } from 'express'
-import { Candidate } from '../models/candidates'
+import { Candidate } from '../models'
 
 export const candidatesController ={
     // GET /candidates
