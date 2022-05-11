@@ -37,8 +37,9 @@ export const jobsController ={
     show: async (req: Request, res: Response) => {
         const { id } = req.params
         try {
-            const job = await Job.findByPk(id, { include: 'company' })
-            return res.json(job)
+            const job = await Job.findByPk(id, { include: ['company', 'candidates'] })
+            const candidateCount = await job?.countCandidates()
+            return res.json({ ...job?.get(), candidateCount })
         } catch (err) {
             if (err instanceof Error){
                 return res.status(400).json({message: err.message})
@@ -73,6 +74,46 @@ export const jobsController ={
         const { id } = req.params
         try {
             await Job.destroy({ where: {id} })
+            return res.status(204).send()
+        } catch (err) {
+            if (err instanceof Error){
+                return res.status(400).json({message: err.message})
+            }
+        }
+    },
+
+    //PUT /jobs/:jobId/candidates/:candidateId
+    addCandidate: async (req: Request, res: Response) =>{
+        const { candidateId, jobId } = req.params
+        try {
+            const job = await Job.findByPk(jobId)
+            if (job === null){
+                return res.status(404).json({message: 'Vaga de emprego não encontrada'})
+            }
+            if (isNaN(+candidateId)){
+                return res.status(404).json({message: 'Informe um identificador de candidato válido'})
+            }
+            await job.addCandidate(Number(candidateId))
+            return res.status(204).send()
+        } catch (err) {
+            if (err instanceof Error){
+                return res.status(400).json({message: err.message})
+            }
+        }
+    },
+
+    //DELETE /jobs/:jobId/candidates/:candidateId
+    removeCandidate: async (req: Request, res: Response) =>{
+        const { candidateId, jobId } = req.params
+        try {
+            const job = await Job.findByPk(jobId)
+            if (job === null){
+                return res.status(404).json({message: 'Vaga de emprego não encontrada'})
+            }
+            if (isNaN(+candidateId)){
+                return res.status(404).json({message: 'Informe um identificador de candidato válido'})
+            }
+            await job.removeCandidate(Number(candidateId))
             return res.status(204).send()
         } catch (err) {
             if (err instanceof Error){
