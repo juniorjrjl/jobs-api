@@ -10,8 +10,11 @@ services:
       - .:/jobs-api
     environment:
       DATABASE_URL: postgres://jobs_api:jobs_api@db/onebitjobs_development
+      NODE_ENV: development
     depends_on:
       - db
+    networks:
+      - api-sequelize
   db:
     image: postgres:14.2
     environment:
@@ -20,5 +23,11 @@ services:
       POSTGRES_PASSWORD: jobs_api
     ports:
       - "5432:5432"
+    networks:
+      - api-sequelize
+
+networks:
+  api-sequelize:
+    driver: bridge
 volumes:
   db:
