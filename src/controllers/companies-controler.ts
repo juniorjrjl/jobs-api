@@ -49,6 +49,8 @@ export const companiesController = {
         const { id } = req.params
         const { name, bio, website, email } = req.body
         try{
+            const company = await Company.findByPk(id)
+            if (company === null) return res.status(404).json({ message: 'Empresa não encontrada'} )
             const [affectedRows, companies] = await Company.update({ 
                 name, 
                 bio, 
