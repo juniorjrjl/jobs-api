@@ -7,6 +7,7 @@
     "migrate": "sequelize-cli db:migrate",
     "dev": "npm run migrate && ts-node-dev src/server.ts",
     "create-test-db": "NODE_ENV=test sequelize-cli db:create",
+    "migrate-test": "NODE_ENV=test sequelize-cli db:migrate",
     "drop-test-db": "NODE_ENV=test sequelize-cli db:drop",
     "test": "jest --watchAll"
   },

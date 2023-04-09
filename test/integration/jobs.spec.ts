@@ -124,11 +124,11 @@ describe('Jobs endpoints', () => {
     it('should add a candidate to a job when given valid jobId and candidateId', async () => {
         const candidate = await Candidate.create(candidateFactory.build())
 
-        const { body, statusCode } = await supertest(app).put(`/jobs/${jobs[0].id}/candidates/${candidate.id}`)
+        const { body, statusCode } = await supertest(app).post(`/jobs/${jobs[0].id}/candidates/${candidate.id}`)
 
         const jobCandidates = await jobs[0].getCandidates()
 
-        expect(statusCode).toBe(204)
+        expect(statusCode).toBe(201)
         expect(body).toEqual({})
         expect(jobCandidates.length).toBe(1)
         expect(jobCandidates[0].id).toBe(candidate.id)
@@ -140,7 +140,7 @@ describe('Jobs endpoints', () => {
         const candidate = await Candidate.create(candidateFactory.build())
         const unexistingJobId = jobs[jobs.length - 1].id + 1
 
-        const { body, statusCode } = await supertest(app).put(`/jobs/${unexistingJobId}/candidates/${candidate.id}`)
+        const { body, statusCode } = await supertest(app).post(`/jobs/${unexistingJobId}/candidates/${candidate.id}`)
 
         expect(statusCode).toBe(404)
         expect(body.message).toEqual('Vaga de emprego não encontrada')

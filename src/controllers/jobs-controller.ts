@@ -82,7 +82,7 @@ export const jobsController ={
         }
     },
 
-    //PUT /jobs/:jobId/candidates/:candidateId
+    //POST /jobs/:jobId/candidates/:candidateId
     addCandidate: async (req: Request, res: Response) =>{
         const { candidateId, jobId } = req.params
         try {
@@ -94,7 +94,7 @@ export const jobsController ={
                 return res.status(404).json({message: 'Informe um identificador de candidato válido'})
             }
             await job.addCandidate(Number(candidateId))
-            return res.status(204).send()
+            return res.status(201).send()
         } catch (err) {
             if (err instanceof Error){
                 return res.status(400).json({message: err.message})
